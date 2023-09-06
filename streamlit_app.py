@@ -11,6 +11,7 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+
 # Configuración de la página Streamlit
 st.set_page_config(layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -128,7 +129,6 @@ def main():
                         data2.append(record)
                     except json.JSONDecodeError as e:
                         st.warning(f"Error al cargar una línea del archivo JSON: {e}")
-                        
 
             # Verificar si la columna 'DEPENDENCIA' existe en los datos
             if data2 and all('DEPENDENCIA' in record for record in data2):
@@ -161,87 +161,6 @@ def main():
                 st.plotly_chart(fig_dependencia)
             else:
                 st.error("La columna 'DEPENDENCIA' no se encontró en los datos.")
-            # Verificar si la columna 'SECTOR' existe en el DataFrame
-            if 'SECTOR' in df.columns:
-                # Calcular el conteo de cada sector
-                count_data = df['SECTOR'].value_counts().reset_index()
-                count_data.columns = ['SECTOR', 'COUNT']
-
-                # Crear el gráfico interactivo de barras utilizando Plotly Express
-                fig_sector = px.bar(count_data, x='SECTOR', y='COUNT', title='Distribución de Sectores', color='COUNT',
-                                color_continuous_scale='inferno')
-                fig_sector.update_layout(
-                    xaxis={'categoryorder': 'total descending'},
-                    xaxis_title='Sector',
-                    yaxis_title='Frecuencia',
-                    xaxis_tickangle=45,
-                    width=1200,
-                    height=600
-                )
-
-                # Mostrar el gráfico de barras de Sectores
-                st.title("Distribución de Sectores")
-                st.plotly_chart(fig_sector)
-
-            else:
-                st.error("La columna 'SECTOR' no se encontró en los datos.")
-
-            # Verificar si la columna 'MEDIOENTRADA' existe en el DataFrame
-            if 'MEDIOENTRADA' in df.columns:
-                # Calcular el conteo de cada medio de entrada
-                count_data_medioentrada = df['MEDIOENTRADA'].value_counts().reset_index()
-                count_data_medioentrada.columns = ['MEDIOENTRADA', 'COUNT']
-
-                # Crear el gráfico de barras
-                fig_medioentrada = px.bar(count_data_medioentrada, x='MEDIOENTRADA', y='COUNT', title='Distribución de Medios de Entrada')
-                # Ajustar el tamaño del gráfico
-                fig_medioentrada.update_layout(
-                    width=1200,
-                    height=600  # Ajusta la altura del gráfico según tus preferencias
-                )
-
-                # Mostrar el gráfico de barras de Medios de Entrada
-                st.title("Distribución de Medios de Entrada")
-                st.plotly_chart(fig_medioentrada)
-            else:
-                st.error("La columna 'MEDIOENTRADA' no se encontró en los datos.")
-            # Verificar si la columna 'TIPOSOLICITUD' existe en el DataFrame
-            if 'TIPOSOLICITUD' in df.columns:
-                # Calcular el conteo de cada tipo de solicitud
-                count_data_tiposolicitud = df['TIPOSOLICITUD'].value_counts().reset_index()
-                count_data_tiposolicitud.columns = ['TIPOSOLICITUD', 'COUNT']
-
-                # Crear el gráfico de barras
-                fig_tipo_solicitud = px.bar(count_data_tiposolicitud, x='TIPOSOLICITUD', y='COUNT', title='Distribución de Tipos de Solicitud')
-                fig_tipo_solicitud.update_layout(
-                    width=1200,
-                    height=600  # Ajusta la altura del gráfico según tus preferencias
-                )
-
-                # Mostrar el gráfico de barras de Tipos de Solicitud
-                st.title("Distribución de Tipos de Solicitud")
-                st.plotly_chart(fig_tipo_solicitud)
-            else:
-                st.error("La columna 'TIPOSOLICITUD' no se encontró en los datos.")
-
-            # Verificar si la columna 'RESPUESTA' existe en el DataFrame
-            if 'RESPUESTA' in df.columns:
-                # Calcular el conteo de cada respuesta
-                count_data_respuesta = df['RESPUESTA'].value_counts().reset_index()
-                count_data_respuesta.columns = ['RESPUESTA', 'COUNT']
-
-                # Crear el gráfico de barras
-                fig_respuesta = px.bar(count_data_respuesta, x='RESPUESTA', y='COUNT', title='Distribución de Respuestas')
-                fig_respuesta.update_layout(
-                    width=1200,
-                    height=600  # Ajusta la altura del gráfico según tus preferencias
-                )
-
-                # Mostrar el gráfico de barras de Respuestas
-                st.title("Distribución de Respuestas")
-                st.plotly_chart(fig_respuesta)
-            else:
-                st.error("La columna 'RESPUESTA' no se encontró en los datos.")
 
 
         except FileNotFoundError:
