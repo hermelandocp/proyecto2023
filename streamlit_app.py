@@ -119,7 +119,7 @@ def main():
 archivo_json = 'yucatan2022.json'
 
 # Crear una lista para almacenar los objetos JSON
-data = []
+data2 = []
 
 # Cargar datos desde el archivo JSON
 try:
@@ -127,17 +127,17 @@ try:
         for line in json_file:
             try:
                 record = json.loads(line)
-                data.append(record)
+                data2.append(record)
             except json.JSONDecodeError as e:
                 st.warning(f"Error al cargar una línea del archivo JSON: {e}")
 
     # Verificar si la columna 'DEPENDENCIA' existe en los datos
-    if data and all('DEPENDENCIA' in record for record in data):
+    if data2 and all('DEPENDENCIA' in record for record in data2):
         # Crear un DataFrame a partir de los datos JSON
-        df = pd.DataFrame(data)
+        dfyuc = pd.DataFrame(data2)
 
         # Obtener los valores y frecuencias de la columna 'DEPENDENCIA'
-        dependencia_counts = df['DEPENDENCIA'].value_counts()
+        dependencia_counts = dfyuc['DEPENDENCIA'].value_counts()
 
         # Generar colores aleatorios para cada barra
         colors = [f'#{random.randint(0, 0xFFFFFF):06x}' for _ in range(len(dependencia_counts[:50]))]
