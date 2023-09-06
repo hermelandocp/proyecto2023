@@ -12,7 +12,6 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
-
 # Configuración de la página Streamlit
 st.set_page_config(layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -136,8 +135,10 @@ try:
         # Crear un DataFrame a partir de los datos JSON
         dfyuc = pd.DataFrame(data2)
 
-        # Obtener los valores y frecuencias de la columna 'DEPENDENCIA'
-        dependencia_counts = dfyuc['DEPENDENCIA'].value_counts()
+        # Verificar si la columna 'DEPENDENCIA' existe en el DataFrame
+        if 'DEPENDENCIA' in dfyuc.columns:
+            # Obtener los valores y frecuencias de la columna 'DEPENDENCIA'
+            dependencia_counts = dfyuc['DEPENDENCIA'].value_counts()
 
         # Generar colores aleatorios para cada barra
         colors = [f'#{random.randint(0, 0xFFFFFF):06x}' for _ in range(len(dependencia_counts[:50]))]
