@@ -133,19 +133,19 @@ try:
     # Verificar si la columna 'DEPENDENCIA' existe en los datos
     if data2 and all('DEPENDENCIA' in record for record in data2):
         # Crear un DataFrame a partir de los datos JSON
-        dfyuc = pd.DataFrame(data2)
+        df = pd.DataFrame(data2)
 
-        # Verificar si la columna 'DEPENDENCIA' existe en el DataFrame
-        if 'DEPENDENCIA' in dfyuc.columns:
-            # Obtener los valores y frecuencias de la columna 'DEPENDENCIA'
-            dependencia_counts = dfyuc['DEPENDENCIA'].value_counts()
+    # Verificar si la columna 'DEPENDENCIA' existe en el DataFrame
+    if 'DEPENDENCIA' in df.columns:
+        # Obtener los valores y frecuencias de la columna 'DEPENDENCIA'
+        dependencia_counts = df['DEPENDENCIA'].value_counts()
 
         # Generar colores aleatorios para cada barra
         colors = [f'#{random.randint(0, 0xFFFFFF):06x}' for _ in range(len(dependencia_counts[:50]))]
 
         # Crear un gráfico interactivo de barras utilizando Plotly Express
-        fig_dependencia = px.bar(dependencia_counts[:50], x=dependencia_counts[:50].index, y='DEPENDENCIA',
-                        title='Top 25 Dependencias más Comunes', labels={'DEPENDENCIA': 'Cantidad', 'x': 'Dependencia'},
+        fig_dependencia = px.bar(x=dependencia_counts[:50].index, y=dependencia_counts[:50],
+                        title='Top 25 Dependencias más Comunes', labels={'y': 'Cantidad', 'x': 'Dependencia'},
                         color=colors)  # Usar los colores generados para colorear las barras
         fig_dependencia.update_layout(
             xaxis={'categoryorder': 'total descending'},
@@ -161,6 +161,7 @@ try:
         st.plotly_chart(fig_dependencia)
     else:
         st.error("La columna 'DEPENDENCIA' no se encontró en los datos.")
+
 except FileNotFoundError:
     st.error(f"Archivo '{archivo_json}' no encontrado.")
 
