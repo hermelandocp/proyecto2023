@@ -11,7 +11,6 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-
 # Configuración de la página Streamlit
 st.set_page_config(layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -129,14 +128,7 @@ def main():
                         data2.append(record)
                     except json.JSONDecodeError as e:
                         st.warning(f"Error al cargar una línea del archivo JSON: {e}")
-
-            # Convertir la lista de objetos JSON en un DataFrame de Pandas
-            df_data2 = pd.DataFrame(data2)
-
-            # Mostrar los datos en Streamlit
-            st.title("Solicitudes de Información en Yucatán durante el año 2022")
-            st.write(df_data2)
-
+                        
 
             # Verificar si la columna 'DEPENDENCIA' existe en los datos
             if data2 and all('DEPENDENCIA' in record for record in data2):
