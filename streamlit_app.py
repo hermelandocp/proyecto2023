@@ -136,7 +136,7 @@ if run:
             dfyuc = pd.DataFrame(data)
 
 
-        st.write("Datos cargados exitosamente:", df)  # Mostrar el DataFrame
+        st.write("Datos cargados exitosamente:", dfyuc)  # Mostrar el DataFrame
     except json.JSONDecodeError as e:
         st.error("Error al cargar el archivo JSON: {}".format(e))
     
