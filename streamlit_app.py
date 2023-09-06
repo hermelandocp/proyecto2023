@@ -114,56 +114,146 @@ def main():
         else:
             st.error("Año no válido")
 
-# Definir la ruta al archivo JSON
-archivo_json = 'yucatan2022.json'
+        # Definir la ruta al archivo JSON
+        archivo_json = 'yucatan2022.json'
 
-# Crear una lista para almacenar los objetos JSON
-data2 = []
+        # Crear una lista para almacenar los objetos JSON
+        data2 = []
 
-# Cargar datos desde el archivo JSON
-try:
-    with open(archivo_json, 'r') as json_file:
-        for line in json_file:
-            try:
-                record = json.loads(line)
-                data2.append(record)
-            except json.JSONDecodeError as e:
-                st.warning(f"Error al cargar una línea del archivo JSON: {e}")
+        # Cargar datos desde el archivo JSON
+        try:
+            with open(archivo_json, 'r') as json_file:
+                for line in json_file:
+                    try:
+                        record = json.loads(line)
+                        data2.append(record)
+                    except json.JSONDecodeError as e:
+                        st.warning(f"Error al cargar una línea del archivo JSON: {e}")
 
-    # Verificar si la columna 'DEPENDENCIA' existe en los datos
-    if data2 and all('DEPENDENCIA' in record for record in data2):
-        # Crear un DataFrame a partir de los datos JSON
-        df = pd.DataFrame(data2)
+            # Convertir la lista de objetos JSON en un DataFrame de Pandas
+            df_data2 = pd.DataFrame(data2)
 
-    # Verificar si la columna 'DEPENDENCIA' existe en el DataFrame
-    if 'DEPENDENCIA' in df.columns:
-        # Obtener los valores y frecuencias de la columna 'DEPENDENCIA'
-        dependencia_counts = df['DEPENDENCIA'].value_counts()
+            # Mostrar los datos en Streamlit
+            st.title("Solicitudes de Información en Yucatán durante el año 2022")
+            st.write(df_data2)
 
-        # Generar colores aleatorios para cada barra
-        colors = [f'#{random.randint(0, 0xFFFFFF):06x}' for _ in range(len(dependencia_counts[:50]))]
 
-        # Crear un gráfico interactivo de barras utilizando Plotly Express
-        fig_dependencia = px.bar(x=dependencia_counts[:50].index, y=dependencia_counts[:50],
-                        title='Top 25 Dependencias más Comunes', labels={'y': 'Cantidad', 'x': 'Dependencia'},
-                        color=colors)  # Usar los colores generados para colorear las barras
-        fig_dependencia.update_layout(
-            xaxis={'categoryorder': 'total descending'},
-            xaxis_title='Dependencia',
-            yaxis_title='Cantidad',
-            width=1200,  # Ajusta el ancho del gráfico según tus preferencias
-            height=900,  # Ajusta la altura del gráfico según tus preferencias
-        )
-        fig_dependencia.update_xaxes(tickangle=90)
+            # Verificar si la columna 'DEPENDENCIA' existe en los datos
+            if data2 and all('DEPENDENCIA' in record for record in data2):
+                # Crear un DataFrame a partir de los datos JSON
+                df = pd.DataFrame(data2)
 
-        # Mostrar el gráfico de barras de Dependencia
-        st.title("Distribución de Dependencias")
-        st.plotly_chart(fig_dependencia)
-    else:
-        st.error("La columna 'DEPENDENCIA' no se encontró en los datos.")
+            # Verificar si la columna 'DEPENDENCIA' existe en el DataFrame
+            if 'DEPENDENCIA' in df.columns:
+                # Obtener los valores y frecuencias de la columna 'DEPENDENCIA'
+                dependencia_counts = df['DEPENDENCIA'].value_counts()
 
-except FileNotFoundError:
-    st.error(f"Archivo '{archivo_json}' no encontrado.")
+                # Generar colores aleatorios para cada barra
+                colors = [f'#{random.randint(0, 0xFFFFFF):06x}' for _ in range(len(dependencia_counts[:50]))]
+
+                # Crear un gráfico interactivo de barras utilizando Plotly Express
+                fig_dependencia = px.bar(x=dependencia_counts[:50].index, y=dependencia_counts[:50],
+                                title='Top 25 Dependencias más Comunes', labels={'y': 'Cantidad', 'x': 'Dependencia'},
+                                color=colors)  # Usar los colores generados para colorear las barras
+                fig_dependencia.update_layout(
+                    xaxis={'categoryorder': 'total descending'},
+                    xaxis_title='Dependencia',
+                    yaxis_title='Cantidad',
+                    width=1200,  # Ajusta el ancho del gráfico según tus preferencias
+                    height=900,  # Ajusta la altura del gráfico según tus preferencias
+                )
+                fig_dependencia.update_xaxes(tickangle=90)
+
+                # Mostrar el gráfico de barras de Dependencia
+                st.title("Distribución de Dependencias")
+                st.plotly_chart(fig_dependencia)
+            else:
+                st.error("La columna 'DEPENDENCIA' no se encontró en los datos.")
+            # Verificar si la columna 'SECTOR' existe en el DataFrame
+            if 'SECTOR' in df.columns:
+                # Calcular el conteo de cada sector
+                count_data = df['SECTOR'].value_counts().reset_index()
+                count_data.columns = ['SECTOR', 'COUNT']
+
+                # Crear el gráfico interactivo de barras utilizando Plotly Express
+                fig_sector = px.bar(count_data, x='SECTOR', y='COUNT', title='Distribución de Sectores', color='COUNT',
+                                color_continuous_scale='inferno')
+                fig_sector.update_layout(
+                    xaxis={'categoryorder': 'total descending'},
+                    xaxis_title='Sector',
+                    yaxis_title='Frecuencia',
+                    xaxis_tickangle=45,
+                    width=1200,
+                    height=600
+                )
+
+                # Mostrar el gráfico de barras de Sectores
+                st.title("Distribución de Sectores")
+                st.plotly_chart(fig_sector)
+
+            else:
+                st.error("La columna 'SECTOR' no se encontró en los datos.")
+
+            # Verificar si la columna 'MEDIOENTRADA' existe en el DataFrame
+            if 'MEDIOENTRADA' in df.columns:
+                # Calcular el conteo de cada medio de entrada
+                count_data_medioentrada = df['MEDIOENTRADA'].value_counts().reset_index()
+                count_data_medioentrada.columns = ['MEDIOENTRADA', 'COUNT']
+
+                # Crear el gráfico de barras
+                fig_medioentrada = px.bar(count_data_medioentrada, x='MEDIOENTRADA', y='COUNT', title='Distribución de Medios de Entrada')
+                # Ajustar el tamaño del gráfico
+                fig_medioentrada.update_layout(
+                    width=1200,
+                    height=600  # Ajusta la altura del gráfico según tus preferencias
+                )
+
+                # Mostrar el gráfico de barras de Medios de Entrada
+                st.title("Distribución de Medios de Entrada")
+                st.plotly_chart(fig_medioentrada)
+            else:
+                st.error("La columna 'MEDIOENTRADA' no se encontró en los datos.")
+            # Verificar si la columna 'TIPOSOLICITUD' existe en el DataFrame
+            if 'TIPOSOLICITUD' in df.columns:
+                # Calcular el conteo de cada tipo de solicitud
+                count_data_tiposolicitud = df['TIPOSOLICITUD'].value_counts().reset_index()
+                count_data_tiposolicitud.columns = ['TIPOSOLICITUD', 'COUNT']
+
+                # Crear el gráfico de barras
+                fig_tipo_solicitud = px.bar(count_data_tiposolicitud, x='TIPOSOLICITUD', y='COUNT', title='Distribución de Tipos de Solicitud')
+                fig_tipo_solicitud.update_layout(
+                    width=1200,
+                    height=600  # Ajusta la altura del gráfico según tus preferencias
+                )
+
+                # Mostrar el gráfico de barras de Tipos de Solicitud
+                st.title("Distribución de Tipos de Solicitud")
+                st.plotly_chart(fig_tipo_solicitud)
+            else:
+                st.error("La columna 'TIPOSOLICITUD' no se encontró en los datos.")
+
+            # Verificar si la columna 'RESPUESTA' existe en el DataFrame
+            if 'RESPUESTA' in df.columns:
+                # Calcular el conteo de cada respuesta
+                count_data_respuesta = df['RESPUESTA'].value_counts().reset_index()
+                count_data_respuesta.columns = ['RESPUESTA', 'COUNT']
+
+                # Crear el gráfico de barras
+                fig_respuesta = px.bar(count_data_respuesta, x='RESPUESTA', y='COUNT', title='Distribución de Respuestas')
+                fig_respuesta.update_layout(
+                    width=1200,
+                    height=600  # Ajusta la altura del gráfico según tus preferencias
+                )
+
+                # Mostrar el gráfico de barras de Respuestas
+                st.title("Distribución de Respuestas")
+                st.plotly_chart(fig_respuesta)
+            else:
+                st.error("La columna 'RESPUESTA' no se encontró en los datos.")
+
+
+        except FileNotFoundError:
+            st.error(f"Archivo '{archivo_json}' no encontrado.")
 
 
 # Ejecutar la función principal
