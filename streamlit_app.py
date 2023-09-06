@@ -133,7 +133,7 @@ if run:
                     data.append(json.loads(line))
 
             # Crear el DataFrame a partir de los datos
-            df = pd.DataFrame(data)
+            dfyuc = pd.DataFrame(data)
 
 
         st.write("Datos cargados exitosamente:", df)  # Mostrar el DataFrame
@@ -141,7 +141,7 @@ if run:
         st.error("Error al cargar el archivo JSON: {}".format(e))
     
     # Obtener los valores y frecuencias de la columna DEPENDENCIA#############################################
-    dependencia_counts = df['DEPENDENCIA'].value_counts()
+    dependencia_counts = dfyuc['DEPENDENCIA'].value_counts()
 
     # Generar colores aleatorios para cada barra
     colors = [f'#{random.randint(0, 0xFFFFFF):06x}' for _ in range(len(dependencia_counts[:50]))]
@@ -162,7 +162,7 @@ if run:
 
 
     # Calcular el conteo de cada sector ###############################################################
-    count_data = df['SECTOR'].value_counts().reset_index()
+    count_data = dfyuc['SECTOR'].value_counts().reset_index()
     count_data.columns = ['SECTOR', 'COUNT']
     # Crear el segundo gráfico
     fig_sector = px.bar(count_data, x='SECTOR', y='COUNT', title='Distribución de Sectores', color='COUNT',
@@ -176,7 +176,7 @@ if run:
         height=600
     )
 # Calcular el conteo de cada medio de entrada################################
-    count_data = df['MEDIOENTRADA'].value_counts().reset_index()
+    count_data = dfyuc['MEDIOENTRADA'].value_counts().reset_index()
     count_data.columns = ['MEDIOENTRADA', 'COUNT']
 
     # Crear un gráfico de barras
@@ -188,7 +188,7 @@ if run:
     )
     
     # Calcular el conteo de cada tipo de solicitud ################################
-    count_data = df['TIPOSOLICITUD'].value_counts().reset_index()
+    count_data = dfyuc['TIPOSOLICITUD'].value_counts().reset_index()
     count_data.columns = ['TIPOSOLICITUD', 'COUNT']
     fig_tipo_sol = px.bar(count_data, x='TIPOSOLICITUD', y='COUNT', title='Distribución de Tipos de Solicitud')
     fig_tipo_sol.update_layout(
@@ -197,7 +197,7 @@ if run:
     )
     
     # Calcular el conteo de cada respuesta######################################
-    count_data = df['RESPUESTA'].value_counts().reset_index()
+    count_data = dfyuc['RESPUESTA'].value_counts().reset_index()
     count_data.columns = ['RESPUESTA', 'COUNT']
     # Crear un gráfico de barras
     fig_respuesta = px.bar(count_data, x='RESPUESTA', y='COUNT', title='Distribución de Respuestas')
