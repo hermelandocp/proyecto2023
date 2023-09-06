@@ -218,25 +218,3 @@ if run:
     st.title("Distribución de Tipo de Respuestas")
     st.plotly_chart(fig_respuesta)
     
-    if year == '2022':
-       
-        # Obtener los valores y frecuencias de la columna DEPENDENCIA#############################################
-        dependencia_counts = df['DEPENDENCIA'].value_counts()
-
-        # Generar colores aleatorios para cada barra
-        colors = [f'#{random.randint(0, 0xFFFFFF):06x}' for _ in range(len(dependencia_counts[:50]))]
-
-        # Crear un gráfico interactivo de barras utilizando Plotly Express
-        fig_dependencia = px.bar(dependencia_counts[:50], x=dependencia_counts[:50].index, y='DEPENDENCIA',
-                     title='Top 25 Dependencias más Comunes', labels={'DEPENDENCIA': 'Cantidad', 'x': 'Dependencia'},
-                     color=colors)  # Usar los colores generados para colorear las barras
-        fig_dependencia.update_layout(
-            xaxis={'categoryorder': 'total descending'},
-            xaxis_title='Dependencia',
-            yaxis_title='Cantidad',
-            width=1200,  # Ajusta el ancho del gráfico según tus preferencias
-            height=900,  # Ajusta la altura del gráfico según tus preferencias
-        )
-        fig_dependencia.update_xaxes(tickangle=90)
-        st.title("Distribución de Dependencias")
-        st.plotly_chart(fig_dependencia)
